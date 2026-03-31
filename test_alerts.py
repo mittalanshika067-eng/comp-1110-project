@@ -15,4 +15,6 @@ test_rules = [
 
 # Test the function
 result = alerts.check_category_limits(test_transactions, test_rules)
-print(result)
+
+for alert in result:
+    print(alert)
