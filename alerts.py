@@ -120,8 +120,9 @@ def check_uncategorized(transactions):
       category = i.get('category') 
       #if category is None or empty string or uncategorized
       if not category or category.lower() == 'uncategorized':
-         alert = f"Warning: Uncategorized: ${t['amount']} on {t['date']} - Please add a category"
-   
+         alert = f"Warning: Uncategorized: ${i['amount']} on {i['date']} - Please add a category"
+         alerts.append(alert)
+         
    return alerts
 
 def check_overspending(transactions, budget_rules):  
@@ -160,7 +161,8 @@ def check_overspending(transactions, budget_rules):
         limit = rule['threshold']
         
         consecutive_days = 0  # Counter for how many days in a row over budget
-        for date in sorted_dates:
+        
+       for date in sorted_dates:
         # Check if category exists for this date
             if category in daily_spending[date]:
                 spent = daily_spending[date][category]
@@ -175,7 +177,7 @@ def check_overspending(transactions, budget_rules):
                     alerts.append(alert)
                 consecutive_days = 0 #reset counter after 1 warning.
 
-         if consecutive_days >= 3:
+      if consecutive_days >= 3:
             alert = f"Warning: Overspent on {category} for {consecutive_days} number of days in a row"
             alerts.append(alert)
 
@@ -223,18 +225,3 @@ def run_all_alerts(transactions, budget_rules):
     all_alerts.extend(uncategorized_alerts)
     
     return all_alerts
-   
-                                       
-   
-
-
-      
-
-
-      
-      
-
-
-
-
-
