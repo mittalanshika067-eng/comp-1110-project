@@ -42,24 +42,24 @@ def check_category_limits(transactions, budget_rules):
         period = rule.get('period')
 
    #find the relevant transaction
-    if period == 'daily':
-        period_transaction = check_by_time(transactions,'daily')
-    elif period == 'weekly':
-        period_transaction = check_by_time(transactions,'weekly')
-    elif period == 'monthly':
-        period_transaction = check_by_time(transactions,'monthly')
-    else:
-        period_transaction = transactions 
+       if period == 'daily':
+           period_transaction = check_by_time(transactions,'daily')
+       elif period == 'weekly':
+           period_transaction = check_by_time(transactions,'weekly')
+       elif period == 'monthly':
+           period_transaction = check_by_time(transactions,'monthly')
+       else:
+           period_transaction = transactions 
 
 
-    total_spending = 0 #add up spending per category
-    for i in period_transaction:
-        if i['category'] == category:
-            total_spending += i['amount']
+       total_spending = 0 #add up spending per category
+       for i in period_transaction:
+           if i['category'] == category:
+               total_spending += i['amount']
     
-    if total_spending > limit:
-        alert = f"Warning: You spent ${total_spending:.2f} on {category}. Your budget was ${limit}"
-        alerts.append(alert)
+       if total_spending > limit:
+           alert = f"Warning: You spent ${total_spending:.2f} on {category}. Your budget was ${limit}"
+           alerts.append(alert)
 
     return alerts
 
