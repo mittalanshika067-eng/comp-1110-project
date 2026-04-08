@@ -35,8 +35,14 @@ def check_by_time(transactions, period):
 def check_category_limits(transactions, budget_rules):
     
    alerts = [] #empty list to store necessary alerts
-    
+            
    for rule in budget_rules:
+      
+      if 'category' not in rule:
+         continue
+      if rule.get('alert_type') == 'percentage':
+         continue
+         
       category = rule['category']
       limit = rule['threshold']
       period = rule.get('period')
