@@ -249,7 +249,7 @@ def check_overspending(transactions, budget_rules):
     return alerts
 
 
-def large_transaction (transactions, budget_rules):
+def large_transaction(transactions, budget_rules):
     alerts = []
 
     #check the rule for large transaction 
