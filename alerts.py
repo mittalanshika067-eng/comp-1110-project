@@ -171,7 +171,7 @@ def check_uncategorized(transactions):
             amount = i.get('amount', 0)
             date = i.get('date', 'unknown')
             
-            alert = f"Warning: Uncategorized: ${i['amount']} on {i['date']} - Please add a category"
+            alert = f"Warning: Uncategorized: ${amount} on {date} - Please add a category"
             alerts.append(alert)
 
     return alerts
@@ -271,7 +271,7 @@ def large_transaction (transactions, budget_rules):
             category = i.get('category', 'unknown')
             date = i.get('date', 'unknown')
             
-            alert = f"Warning: You have exceeded your limit of {large_amount_limit} on {i['category']} on {i['date']}. Your spending was ${i['amount']}"
+            alert = f"Warning: You have exceeded your limit of {large_amount_limit} on {category} on {date}. Your spending was ${amount}"
             alerts.append(alert)
 
     return alerts
