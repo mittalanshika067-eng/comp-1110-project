@@ -11,7 +11,11 @@ def check_by_time(transactions, period):
     filtered_data = []
 
     for transaction in transactions:
-        transaction_date = datetime.strptime(transaction['date'], "%Y-%m-%d").date()   #Converts the transaction's date string (like "2025-04-08") into a date object 
+       #Prevent crash if date is missing or invalid
+        try:
+            transaction_date = datetime.strptime(transaction['date'], "%Y-%m-%d").date() #Converts the transaction's date string (like "2025-04-08") into a date object
+        except (KeyError, ValueError):
+            continue 
 
         if period == "daily":
             if transaction_date == today:
@@ -44,25 +48,41 @@ def check_category_limits(transactions, budget_rules):
         if rule.get('alert_type') == 'percentage':
             continue
 
-        category = rule['category']
-        limit = rule['threshold']
+        #Prevent crash if rule is incomplete
+        category = rule.get('category')
+        limit = rule.get('threshold')
+        if category is None or limit is None:
+            continue
+      
         period = rule.get('period')
 
         #find the relevant transaction
         if period == 'daily':
-            period_transaction = check_by_time(transactions, 'daily')
+            period_transaction = check_by_time(transactions,'daily')
         elif period == 'weekly':
-            period_transaction = check_by_time(transactions, 'weekly')
+            period_transaction = check_by_time(transactions,'weekly')
         elif period == 'monthly':
-            period_transaction = check_by_time(transactions, 'monthly')
+            period_transaction = check_by_time(transactions,'monthly')
         else:
             period_transaction = transactions
 
         total_spending = 0  #add up spending per category
-        for i in period_transaction:
-            if i['category'] == category:
-                total_spending += i['amount']
 
+        for i in period_transaction:
+
+            #if transaction is broken code won’t crash.
+            transaction_category = i.get('category')
+            amount = i.get('amount', 0)
+
+            #convert safely to number in case of bad data 
+            try:
+                amount = float(amount)
+            except (ValueError, TypeError):
+                continue
+
+            if transaction_category == category:
+                total_spending += amount
+   
         if total_spending > limit:
             alert = f"Warning: You spent ${total_spending:.2f} on {category}. Your budget was ${limit}"
             alerts.append(alert)
@@ -75,11 +95,18 @@ def check_category_limits(transactions, budget_rules):
 def check_percentage_alerts(transactions, budget_rules):
 
     alerts = []
-
-    # Calculate total spending to then help calculate percentages
+    
     total_spending = 0
     for i in transactions:
-        total_spending += i['amount']
+        
+        #Safe amount handling
+        amount = i.get('amount', 0)
+        try:
+            amount = float(amount)
+        except (ValueError, TypeError):
+            continue
+
+        total_spending += amount
 
     # If no spending at all, return empty list 
     if total_spending == 0:
@@ -88,8 +115,15 @@ def check_percentage_alerts(transactions, budget_rules):
     # Calculate spending for each category and store it as a dictionary {category:amount}
     category_totals = {}
     for transaction in transactions:
-        category = transaction['category']
-        amount = transaction['amount']
+        
+        category = transaction.get('category')
+        amount = transaction.get('amount', 0)
+
+        #Safe conversion
+        try:
+            amount = float(amount)
+        except (ValueError, TypeError):
+            continue
 
         if category in category_totals:
             category_totals[category] += amount
@@ -101,8 +135,11 @@ def check_percentage_alerts(transactions, budget_rules):
         if rule.get('alert_type') != 'percentage':
             continue
 
-        category = rule['category']
-        percentage_limit = rule['threshold']  # For percentage rules, 'threshold' means % not the same as spending in above function
+        # Check rule safety
+        category = rule.get('category')
+        percentage_limit = rule.get('threshold') # For percentage rules, 'threshold' means % not the same as spending in above function
+        if category is None or percentage_limit is None:
+            continue
 
         # Get amount spent on this category (0 if none)
         if category in category_totals:
@@ -120,7 +157,7 @@ def check_percentage_alerts(transactions, budget_rules):
     return alerts
 
 
-#check categorized that are not categorized properly 
+#check categories that are not categorized properly 
 def check_uncategorized(transactions):
     alerts = []
 
@@ -129,6 +166,11 @@ def check_uncategorized(transactions):
 
         #if category is None or empty string or uncategorized
         if not category or category.lower() == 'uncategorized':
+            
+            #Safe amount access
+            amount = i.get('amount', 0)
+            date = i.get('date', 'unknown')
+            
             alert = f"Warning: Uncategorized: ${i['amount']} on {i['date']} - Please add a category"
             alerts.append(alert)
 
@@ -146,9 +188,19 @@ def check_overspending(transactions, budget_rules):
     daily_spending = {}
 
     for i in transactions:
-        date = i['date']
-        category = i['category']
-        amount = i['amount']
+        
+        date = i.get('date')
+        category = i.get('category')
+        amount = i.get('amount', 0)
+
+        #Skip invalid entries
+        if not date or not category:
+            continue
+
+        try:
+            amount = float(amount)
+        except (ValueError, TypeError):
+            continue
 
         if date not in daily_spending:
             daily_spending[date] = {}
@@ -166,9 +218,12 @@ def check_overspending(transactions, budget_rules):
     for rule in budget_rules:
         if rule.get('period') != 'daily':
             continue
-
-        category = rule['category']
-        limit = rule['threshold']
+            
+        #check rule safety
+        category = rule.get('category')
+        limit = rule.get('threshold')
+        if category is None or limit is None:
+            continue
 
         consecutive_days = 0  # Counter for how many days in a row over budget
 
@@ -194,17 +249,28 @@ def check_overspending(transactions, budget_rules):
     return alerts
 
 
-def large_transaction(transactions, budget_rules):
+def large_transaction (transactions, budget_rules):
     alerts = []
 
     #check the rule for large transaction 
-    large_amount_limit = 300  #default large amount
+    large_amount_limit = 300 #default large amount
     for rule in budget_rules:
         if rule.get('alert_type') == 'large transaction':
             large_amount_limit = rule.get('threshold', 300)
 
     for i in transactions:
-        if i['amount'] > large_amount_limit:
+
+        #Safe amount handling
+        amount = i.get('amount', 0)
+        try:
+            amount = float(amount)
+        except (ValueError, TypeError):
+            continue
+
+        if amount > large_amount_limit:
+            category = i.get('category', 'unknown')
+            date = i.get('date', 'unknown')
+            
             alert = f"Warning: You have exceeded your limit of {large_amount_limit} on {i['category']} on {i['date']}. Your spending was ${i['amount']}"
             alerts.append(alert)
 
