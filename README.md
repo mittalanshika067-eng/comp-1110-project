@@ -30,8 +30,7 @@ The assistant is privacy-focused (no bank sync), easy to use, and designed speci
    ```bash
    git clone https://github.com/yourusername/comp1110-budget-assistant.git
    cd comp1110-budget-assistant
-
-Running the program: python3 main.py
+python3 main.py
 
 
 ## Data file formats
