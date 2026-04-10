@@ -39,13 +39,14 @@ python3 main.py
 - eg. : 2026-04-09,70,Food,Lunch
 
 2. budget_rules.json
-- eg. :[ {'category': 'Food', 'threshold': 50, 'period': 'daily', 'alert_type': 'category_cap'},
-    {'category': 'Food', 'threshold': 30, 'alert_type': 'percentage'},
-    {'alert_type': 'large transaction', 'threshold': 300} ] 
+- eg. :
+[
+{'category': 'Food', 'threshold': 50, 'period': 'daily', 'alert_type': 'category_cap'},
+{'category': 'Food', 'threshold': 30, 'alert_type': 'percentage'},
+{'alert_type': 'large transaction', 'threshold': 300}
+  ] 
 
 ## Features 
-
-Features
 
 1. Transaction Management
 - Add new transactions (date, amount, category, description)
