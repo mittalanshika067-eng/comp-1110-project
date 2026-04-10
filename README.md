@@ -33,24 +33,62 @@ The assistant is privacy-focused (no bank sync), easy to use, and designed speci
 
 Running the program: python3 main.py
 
-## File Structure 
-comp-1110-project/
-├── main.py              # Main program with text menu
-├── transactions.py      # Transaction management (add, view, filter)
-├── file_io.py           # File handling (save/load CSV and JSON)
-├── stats.py             # Statistics calculations
-├── alerts.py            # Alert system (budget checks)
-├── data/                # Folder for data files
-│   ├── transactions.csv # Saved transactions
-│   ├── budget_rules.json # Budget rules
-│   └── settings.json    # User settings (large transaction limit)
-├── test_data/           # Sample test files
-└── README.md
 
 ## Data file formats
 
 1. transactions.csv: date,amount,category,description
-eg. : 2026-04-09,70,Food,Lunch
+- eg. : 2026-04-09,70,Food,Lunch
 
 2. budget_rules.json
-eg. : 
+- eg. :[ {'category': 'Food', 'threshold': 50, 'period': 'daily', 'alert_type': 'category_cap'},
+    {'category': 'Food', 'threshold': 30, 'alert_type': 'percentage'},
+    {'alert_type': 'large transaction', 'threshold': 300} ] 
+
+## Features 
+
+Features
+
+1. Transaction Management
+- Add new transactions (date, amount, category, description)
+- View all transactions
+- Filter transactions by date or category
+
+2. Budget Rules
+- Set daily/weekly/monthly category spending limits
+- Set percentage-based alerts (e.g., Food > 30% of total spending)
+- Set large transaction alerts
+
+3. Statistics
+- Total spending
+- Spending by category
+- Daily/weekly/monthly breakdown
+- Top spending categories
+- Spending trends
+
+4. Alerts
+- Category cap exceeded (daily/weekly/monthly)
+- Percentage of total spending exceeded
+- Consecutive days overspending (3+ days)
+- Large transaction detected
+- Uncategorized transaction warning
+
+## Sample Test Cases 
+will add later
+
+## Error Handling
+- Missing files: Creates new files or uses defaults
+- Corrupted JSON: Falls back to default settings
+- Invalid input: Prompts user to re-enter correct values
+- Empty transactions: Shows "No transactions found" message
+
+## Limitations
+- No automatic bank syncing (manual entry or CSV import only)
+- No real-time spending tracking
+- No multi-currency support
+- Alerts are reactive (after spending), not proactive
+
+## Future Improvements
+- Add CSV import from banking apps
+- Add spending predictions
+- Add proactive alerts 
+- Add mobile app version
