@@ -267,7 +267,8 @@ def main():
         choice = input("\nChoose an option (1-6): ")
         
         if choice == '1':
-            transactions = add_transaction(transactions)
+            add_transaction()
+            transactions = get_transactions
         
         elif choice == '2':
             view_transactions(transactions)
