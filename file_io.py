@@ -94,11 +94,11 @@ def load_rules(filename):
     except FileNotFoundError:
 
         print("Rules file not found")
-        rules = {}
+        rules = []
 
     except json.JSONDecodeError:
 
         print("Rules file is corrupted")
-        rules = {}
+        rules = []
 
     return rules
