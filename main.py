@@ -8,12 +8,12 @@ from datetime import datetime
 def load_or_create():
 
     transactions = io.load_transactions('data/transactions.csv') #path for required file
-    if transactions is None:
+    if not transactions:
         transactions = []
         print("There are no existing transactions.")
     
     budget_rules = io.load_rules('data/budget_rules.json')
-    if budget_rules is None: 
+    if not budget_rules: 
         budget_rules = []
         print("There are no existing budgeting rules")
 
@@ -57,47 +57,49 @@ def large_transaction_limit(budget_rules):
         budget_rules.append({'alert_type': 'large transaction', 'threshold' : 300})
         return 300
 
+
 #let user add new transactions
-def add_transaction(transactions):
+#/////////////////////////////////// might not need because transaction.py handles these already, but if what I did was bad you can just remove the comment. I also have a copy of the og code
+# def add_transaction(transactions):
 
-    print("\n--- Add New Transaction ---")
+#     print("\n--- Add New Transaction ---")
 
-    #get date 
-    while True:
-        date = input("Please input the date of your transaction (YYYY-MM-DD): ")
+#     #get date 
+#     while True:
+#         date = input("Please input the date of your transaction (YYYY-MM-DD): ")
 
-        try: 
-            datetime.strptime(date, "%Y-%m-%d")      #make sure format is correct 
-            break 
+#         try: 
+#             datetime.strptime(date, "%Y-%m-%d")      #make sure format is correct 
+#             break 
 
-        except ValueError:
-            print('Invalid date format, Please input date again: ')
+#         except ValueError:
+#             print('Invalid date format, Please input date again: ')
     
-    #get amount
-    while True:
-        try: 
-            amount = float(input('Please input the transaction amount (HKD): '))
-            if amount > 0:
-                break
-            else:
-                print('Invalid number entered. Amount must be a positive number')
+#     #get amount
+#     while True:
+#         try: 
+#             amount = float(input('Please input the transaction amount (HKD): '))
+#             if amount > 0:
+#                 break
+#             else:
+#                 print('Invalid number entered. Amount must be a positive number')
     
-        except ValueError:
-            print('Enter a valid amount') 
+#         except ValueError:
+#             print('Enter a valid amount') 
 
-    #get category 
-    category = input("Please input a category (eg. Food, transport, gifts): ")
-    if category.strip() == "":
-        category = "Uncategorized"
+#     #get category 
+#     category = input("Please input a category (eg. Food, transport, gifts): ")
+#     if category.strip() == "":
+#         category = "Uncategorized"
         
-    #get description
-    description = input ("Please input a short description for your transaction: ")
+#     #get description
+#     description = input ("Please input a short description for your transaction: ")
 
-    #add transaction to transactions file
-    transactions = t.add_transaction(date, amount, category, description)
-    print("Transaction added successfully!")
-    return transactions
-       
+#     #add transaction to transactions file
+#     transactions = t.add_transaction(date, amount, category, description)
+#     print("Transaction added successfully!")
+#     return transactions
+#////////////////////////////////// end of comment   
 
 def view_transactions(transactions):
     if not transactions:
