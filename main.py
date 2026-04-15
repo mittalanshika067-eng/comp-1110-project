@@ -110,18 +110,34 @@ def view_transactions(transactions):
     t.view_all()
 
 #shows full statistics report which only works if there are transactions.
-def view_stats(transactions):
+def view_transactions():
+    transactions = t.get_transactions()
+
+    if not transactions:
+        print("\nNo transactions found.")
+        return
+
+    print("\n--- All Transactions ---")
+    t.view_all()
+
+
+def view_stats():
+    transactions = t.get_transactions()
+
     if not transactions:
         print("\nNo transactions found yet. Please add some transactions to view full statistics")
         return
-    
+
     s.print_full_statistics(transactions)
 
-def check_alerts(transactions, budget_rules):
+
+def check_alerts(budget_rules):
+    transactions = t.get_transactions()
+
     if not transactions:
         print("\nNo transactions found. No alerts to display.")
         return
-    
+
     print("Checking for alerts")
     all_alerts = a.run_all_alerts(transactions, budget_rules)
 
@@ -130,9 +146,8 @@ def check_alerts(transactions, budget_rules):
         print()
         for alert in all_alerts:
             print(alert)
-    
     else:
-        print('Congratulations! No alerts found')
+        print("Congratulations! No alerts found")
 
 #edit any rules (add or remove)
 def edit_budget_rules(budget_rules):
@@ -275,13 +290,13 @@ def main():
             transactions = t.get_transactions()
         
         elif choice == '2':
-            view_transactions(transactions)
+            view_transactions()
         
         elif choice == '3':
-            view_stats(transactions)
+            view_stats()
         
         elif choice == '4':
-            check_alerts(transactions, budget_rules)
+            check_alerts(budget_rules)
         
         elif choice == '5':
             edit_budget_rules(budget_rules)
