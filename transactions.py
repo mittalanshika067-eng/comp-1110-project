@@ -12,6 +12,7 @@ VALID_CATEGORIES = [
     "Health",
     "Other"
 ]
+transactions = []
 
 # VALIDATION HELPER FUNCTIONS
 
