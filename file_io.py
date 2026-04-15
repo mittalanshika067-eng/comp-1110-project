@@ -1,101 +1,103 @@
-import json  # lets us save/load data in JSON format
+import json
+import os
 
-# Save transactions to a file (CSV-style text)
+
 def save_transactions(filename, transactions):
-
     try:
-        with open(filename, "w") as file:
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
+
+        with open(filename, "w", encoding="utf-8") as file:
             for t in transactions:
                 line = (
-                    t["date"] +
-                    "," +
-                    str(t["amount"]) +
-                    "," +
-                    t["category"] +
-                    "," +
-                    t["description"] +
-                    "\n"
+                    t["date"] + "," +
+                    str(t["amount"]) + "," +
+                    t["category"] + "," +
+                    t["description"] + "\n"
                 )
                 file.write(line)
 
-    except IOError:
+    except (IOError, KeyError):
         print("Error saving transactions file")
 
 
-# Load transactions from a file
 def load_transactions(filename):
-
-    transactions = []  # empty list to store results
+    transactions = []
 
     try:
-
-        # open file in read mode
-        with open(filename, "r") as file:
-
-            # read each line
+        with open(filename, "r", encoding="utf-8") as file:
             for line in file:
-
-                # split the line into parts using commas
                 parts = line.strip().split(",")
 
-                # skip bad lines that don't have 4 values
                 if len(parts) != 4:
                     continue
 
-                # create dictionary from the parts
                 transaction = {
                     "date": parts[0],
-                    "amount": float(parts[1]),  # convert text to number
+                    "amount": float(parts[1]),
                     "category": parts[2],
                     "description": parts[3]
                 }
 
-                # add it to the list
                 transactions.append(transaction)
 
     except FileNotFoundError:
+        print("Transactions file not found")
 
-        # if file doesn't exist
-        print("File not found")
+    except ValueError:
+        print("Transactions file has invalid data")
 
     return transactions
 
 
-# Save rules to a JSON file
 def save_rules(filename, rules):
-
     try:
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
 
-        # open file in write mode
-        with open(filename, "w") as file:
-
-            # write dictionary into file as JSON
+        with open(filename, "w", encoding="utf-8") as file:
             json.dump(rules, file, indent=4)
 
     except IOError:
-
         print("Error saving rules file")
 
 
-# Load rules from a JSON file
 def load_rules(filename):
-
     try:
-
-        # open file in read mode
-        with open(filename, "r") as file:
-
-            # read JSON and convert it into a dictionary
+        with open(filename, "r", encoding="utf-8") as file:
             rules = json.load(file)
 
     except FileNotFoundError:
-
         print("Rules file not found")
-        rules = {}
+        rules = []
 
     except json.JSONDecodeError:
-
         print("Rules file is corrupted")
         rules = []
 
     return rules
+
+
+def save_categories(filename, categories):
+    try:
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
+
+        with open(filename, "w", encoding="utf-8") as file:
+            json.dump(categories, file, indent=4)
+
+    except IOError:
+        print("Error saving categories file")
+
+
+def load_categories(filename):
+    try:
+        with open(filename, "r", encoding="utf-8") as file:
+            categories = json.load(file)
+
+    except FileNotFoundError:
+        print("Categories file not found")
+        categories = []
+
+    except json.JSONDecodeError:
+        print("Categories file is corrupted")
+        categories = []
+
+    return categories
