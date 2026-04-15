@@ -112,7 +112,9 @@ def large_transaction_limit(budget_rules):
 
 #shows full statistics report which only works if there are transactions.
 def view_transactions():
+    print("DEBUG: option 2 reached")
     transactions = t.get_transactions()
+    print("DEBUG transactions =", transactions)
 
     if not transactions:
         print("\nNo transactions found.")
@@ -123,7 +125,9 @@ def view_transactions():
 
 
 def view_stats():
+    print("DEBUG: option 3 reached")
     transactions = t.get_transactions()
+    print("DEBUG transactions =", transactions)
 
     if not transactions:
         print("\nNo transactions found yet. Please add some transactions to view full statistics")
@@ -133,7 +137,10 @@ def view_stats():
 
 
 def check_alerts(budget_rules):
+    print("DEBUG: option 4 reached")
     transactions = t.get_transactions()
+    print("DEBUG transactions =", transactions)
+    print("DEBUG budget_rules =", budget_rules)
 
     if not transactions:
         print("\nNo transactions found. No alerts to display.")
