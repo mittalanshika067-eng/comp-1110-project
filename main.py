@@ -101,13 +101,14 @@ def large_transaction_limit(budget_rules):
 #     return transactions
 #////////////////////////////////// end of comment   
 
-def view_transactions(transactions):
-    if not transactions:
-        print("\nNo transactions found.")
-        return
+
+# def view_transactions(transactions):
+#     if not transactions:
+#         print("\nNo transactions found.")
+#         return
     
-    print("\n--- All Transactions ---")
-    t.view_all()
+#     print("\n--- All Transactions ---")
+#     t.view_all()
 
 #shows full statistics report which only works if there are transactions.
 def view_transactions():
