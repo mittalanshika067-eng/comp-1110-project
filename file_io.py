@@ -4,7 +4,9 @@ import os
 
 def save_transactions(filename, transactions):
     try:
-        os.makedirs(os.path.dirname(filename), exist_ok=True)
+        folder = os.path.dirname(filename)
+        if folder:
+            os.makedirs(folder, exist_ok=True)
 
         with open(filename, "w", encoding="utf-8") as file:
             for t in transactions:
