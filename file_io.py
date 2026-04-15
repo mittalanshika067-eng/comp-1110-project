@@ -3,26 +3,23 @@ import json  # lets us save/load data in JSON format
 # Save transactions to a file (CSV-style text)
 def save_transactions(filename, transactions):
 
-    # open file in write mode ("w") — this creates or overwrites the file
-    with open(filename, "w") as file:
+    try:
+        with open(filename, "w") as file:
+            for t in transactions:
+                line = (
+                    t["date"] +
+                    "," +
+                    str(t["amount"]) +
+                    "," +
+                    t["category"] +
+                    "," +
+                    t["description"] +
+                    "\n"
+                )
+                file.write(line)
 
-        # go through each transaction in the list
-        for t in transactions:
-
-            # create one line of text separated by commas
-            line = (
-                t["date"] +
-                "," +
-                str(t["amount"]) +
-                "," +
-                t["category"] +
-                "," +
-                t["description"] +
-                "\n"
-            )
-
-            # write that line into the file
-            file.write(line)
+    except IOError:
+        print("Error saving transactions file")
 
 
 # Load transactions from a file
@@ -94,7 +91,7 @@ def load_rules(filename):
     except FileNotFoundError:
 
         print("Rules file not found")
-        rules = []
+        rules = {}
 
     except json.JSONDecodeError:
 
