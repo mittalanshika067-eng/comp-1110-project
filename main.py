@@ -190,7 +190,7 @@ def edit_budget_rules(budget_rules):
     if number == '1':
         print('You have chosen to add a new category')
 
-        category = input('Input a category')
+        category = input('Input a category: ')
 
         try: 
             threshold = float(input('Input amout limit for your category: '))
