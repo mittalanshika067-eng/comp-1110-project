@@ -58,63 +58,10 @@ def large_transaction_limit(budget_rules):
         return 300
 
 
-#let user add new transactions
-#///////////// might not need because transaction.py handles these already, but if what I did was bad you can just remove the comment. I also have a copy of the og code
-# def add_transaction(transactions):
-
-#     print("\n--- Add New Transaction ---")
-
-#     #get date 
-#     while True:
-#         date = input("Please input the date of your transaction (YYYY-MM-DD): ")
-
-#         try: 
-#             datetime.strptime(date, "%Y-%m-%d")      #make sure format is correct 
-#             break 
-
-#         except ValueError:
-#             print('Invalid date format, Please input date again: ')
-    
-#     #get amount
-#     while True:
-#         try: 
-#             amount = float(input('Please input the transaction amount (HKD): '))
-#             if amount > 0:
-#                 break
-#             else:
-#                 print('Invalid number entered. Amount must be a positive number')
-    
-#         except ValueError:
-#             print('Enter a valid amount') 
-
-#     #get category 
-#     category = input("Please input a category (eg. Food, transport, gifts): ")
-#     if category.strip() == "":
-#         category = "Uncategorized"
-        
-#     #get description
-#     description = input ("Please input a short description for your transaction: ")
-
-#     #add transaction to transactions file
-#     transactions = t.add_transaction(date, amount, category, description)
-#     print("Transaction added successfully!")
-#     return transactions
-#//////////////// end of comment   
-
-
-# def view_transactions(transactions):
-#     if not transactions:
-#         print("\nNo transactions found.")
-#         return
-    
-#     print("\n--- All Transactions ---")
-#     t.view_all()
 
 #shows full statistics report which only works if there are transactions.
 def view_transactions():
-    #print("DEBUG: option 2 reached")
     transactions = t.get_transactions()
-    #print("DEBUG transactions =", transactions)
 
     if not transactions:
         print("\nNo transactions found.")
@@ -125,9 +72,7 @@ def view_transactions():
 
 
 def view_stats():
-    #print("DEBUG: option 3 reached")
     transactions = t.get_transactions()
-    #print("DEBUG transactions =", transactions)
 
     if not transactions:
         print("\nNo transactions found yet. Please add some transactions to view full statistics")
@@ -137,10 +82,7 @@ def view_stats():
 
 
 def check_alerts(budget_rules):
-    #print("DEBUG: option 4 reached")
     transactions = t.get_transactions()
-    #print("DEBUG transactions =", transactions)
-    #print("DEBUG budget_rules =", budget_rules)
 
     if not transactions:
         print("\nNo transactions found. No alerts to display.")
