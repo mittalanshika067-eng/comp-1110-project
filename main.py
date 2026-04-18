@@ -59,7 +59,7 @@ def large_transaction_limit(budget_rules):
 
 
 #let user add new transactions
-#/////////////////////////////////// might not need because transaction.py handles these already, but if what I did was bad you can just remove the comment. I also have a copy of the og code
+#///////////// might not need because transaction.py handles these already, but if what I did was bad you can just remove the comment. I also have a copy of the og code
 # def add_transaction(transactions):
 
 #     print("\n--- Add New Transaction ---")
@@ -99,7 +99,7 @@ def large_transaction_limit(budget_rules):
 #     transactions = t.add_transaction(date, amount, category, description)
 #     print("Transaction added successfully!")
 #     return transactions
-#////////////////////////////////// end of comment   
+#//////////////// end of comment   
 
 
 # def view_transactions(transactions):
@@ -112,9 +112,9 @@ def large_transaction_limit(budget_rules):
 
 #shows full statistics report which only works if there are transactions.
 def view_transactions():
-    print("DEBUG: option 2 reached")
+    #print("DEBUG: option 2 reached")
     transactions = t.get_transactions()
-    print("DEBUG transactions =", transactions)
+    #print("DEBUG transactions =", transactions)
 
     if not transactions:
         print("\nNo transactions found.")
@@ -125,9 +125,9 @@ def view_transactions():
 
 
 def view_stats():
-    print("DEBUG: option 3 reached")
+    #print("DEBUG: option 3 reached")
     transactions = t.get_transactions()
-    print("DEBUG transactions =", transactions)
+    #print("DEBUG transactions =", transactions)
 
     if not transactions:
         print("\nNo transactions found yet. Please add some transactions to view full statistics")
@@ -137,10 +137,10 @@ def view_stats():
 
 
 def check_alerts(budget_rules):
-    print("DEBUG: option 4 reached")
+    #print("DEBUG: option 4 reached")
     transactions = t.get_transactions()
-    print("DEBUG transactions =", transactions)
-    print("DEBUG budget_rules =", budget_rules)
+    #print("DEBUG transactions =", transactions)
+    #print("DEBUG budget_rules =", budget_rules)
 
     if not transactions:
         print("\nNo transactions found. No alerts to display.")
