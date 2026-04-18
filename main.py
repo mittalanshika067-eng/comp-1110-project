@@ -37,7 +37,7 @@ def large_transaction_limit(budget_rules):
     print("Please enter a large transaction limit (for example $300)")
     
     try: 
-        limit = input("Please enter a large transaction limit. The default limit is set at $300 hkd")
+        limit = input("Please enter a large transaction limit. The default limit is set at $300 hkd: ")
         if limit.strip() == "":
             limit = 300 
         else:
@@ -179,11 +179,11 @@ def edit_budget_rules(budget_rules):
                 print(f"  {i+1}. {rule.get('category', 'Unknown')}: ${rule.get('threshold', 0)} ({rule.get('period', 'all time')}) - {rule.get('alert_type', 'category_cap')}")
 
     print("Here are the possible options to change your budget rules: ")
-    print("  1. Add new category rule")
-    print("  2. Add percentage rule")
-    print("  3. Change large transaction limit")
-    print("  4. Remove an existing rule")
-    print("  5. Return to main menu")
+    print("  1. Add new category rule: ")
+    print("  2. Add percentage rule: ")
+    print("  3. Change large transaction limit: ")
+    print("  4. Remove an existing rule: ")
+    print("  5. Return to main menu: ")
 
     number = input('Please choose a number from 1-5 according to your needs: ')
 
@@ -266,7 +266,8 @@ def edit_budget_rules(budget_rules):
         print('Invalid choice')
 
 def main():
-   
+    
+    print("-" * 40)
     print("   PERSONAL BUDGET ASSISTANT")
     print("-" * 40)
     print("Welcome to your personal budgeting tool!")
