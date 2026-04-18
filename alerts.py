@@ -38,57 +38,119 @@ def check_by_time(transactions, period):
 #check is limit for any category is exceeded 
 #budget_rules: has list of rules with category and threshold in dictionary format
 def check_category_limits(transactions, budget_rules):
-
-    alerts = []  #empty list to store necessary alerts
+    alerts = []
 
     for rule in budget_rules:
-
         if 'category' not in rule:
             continue
         if rule.get('alert_type') == 'percentage':
             continue
 
-        #Prevent crash if rule is incomplete
         category = rule.get('category')
         limit = rule.get('threshold')
         if category is None or limit is None:
             continue
       
         period = rule.get('period')
-
-        #find the relevant transaction
+        
+        # Handle different time periods by grouping, not by filtering to "today"
         if period == 'daily':
-            period_transaction = check_by_time(transactions,'daily')
+            # Group spending by each specific date
+            spending_by_date = defaultdict(float)
+            
+            for transaction in transactions:
+                transaction_category = transaction.get('category')
+                amount = transaction.get('amount', 0)
+                date = transaction.get('date')
+                
+                try:
+                    amount = float(amount)
+                except (ValueError, TypeError):
+                    continue
+                
+                if transaction_category == category and date:
+                    spending_by_date[date] += amount
+            
+            # Check each date's total against the limit
+            for date, total in spending_by_date.items():
+                if total > limit:
+                    alert = f"Warning: You spent ${total:.2f} on {category} on {date}. Your daily budget was ${limit}"
+                    alerts.append(alert)
+        
         elif period == 'weekly':
-            period_transaction = check_by_time(transactions,'weekly')
+            # Group by week (Monday to Sunday)
+            spending_by_week = defaultdict(float)
+            
+            for transaction in transactions:
+                transaction_category = transaction.get('category')
+                amount = transaction.get('amount', 0)
+                date_str = transaction.get('date')
+                
+                try:
+                    amount = float(amount)
+                    if date_str:
+                        transaction_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+                    else:
+                        continue
+                except (ValueError, TypeError, KeyError):
+                    continue
+                
+                if transaction_category == category:
+                    # Get week start (Monday)
+                    week_start = transaction_date - timedelta(days=transaction_date.weekday())
+                    spending_by_week[week_start] += amount
+            
+            for week_start, total in spending_by_week.items():
+                if total > limit:
+                    alert = f"Warning: You spent ${total:.2f} on {category} in week starting {week_start}. Your weekly budget was ${limit}"
+                    alerts.append(alert)
+        
         elif period == 'monthly':
-            period_transaction = check_by_time(transactions,'monthly')
-        else:
-            period_transaction = transactions
-
-        total_spending = 0  #add up spending per category
-
-        for i in period_transaction:
-
-            #if transaction is broken code won’t crash.
-            transaction_category = i.get('category')
-            amount = i.get('amount', 0)
-
-            #convert safely to number in case of bad data 
-            try:
-                amount = float(amount)
-            except (ValueError, TypeError):
-                continue
-
-            if transaction_category == category:
-                total_spending += amount
-   
-        if total_spending > limit:
-            alert = f"Warning: You spent ${total_spending:.2f} on {category}. Your budget was ${limit}"
-            alerts.append(alert)
+            # Group by month
+            spending_by_month = defaultdict(float)
+            
+            for transaction in transactions:
+                transaction_category = transaction.get('category')
+                amount = transaction.get('amount', 0)
+                date_str = transaction.get('date')
+                
+                try:
+                    amount = float(amount)
+                    if date_str:
+                        transaction_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+                    else:
+                        continue
+                except (ValueError, TypeError, KeyError):
+                    continue
+                
+                if transaction_category == category:
+                    month_key = f"{transaction_date.year}-{transaction_date.month:02d}"
+                    spending_by_month[month_key] += amount
+            
+            for month, total in spending_by_month.items():
+                if total > limit:
+                    alert = f"Warning: You spent ${total:.2f} on {category} in {month}. Your monthly budget was ${limit}"
+                    alerts.append(alert)
+        
+        else:  # 'all' period or no period specified
+            total_spending = 0
+            for transaction in transactions:
+                transaction_category = transaction.get('category')
+                amount = transaction.get('amount', 0)
+                
+                try:
+                    amount = float(amount)
+                except (ValueError, TypeError):
+                    continue
+                
+                if transaction_category == category:
+                    total_spending += amount
+            
+            if total_spending > limit:
+                alert = f"Warning: You spent ${total_spending:.2f} on {category} in total. Your budget was ${limit}"
+                alerts.append(alert)
 
     return alerts
-
 
 # Check if any category exceeds the threshold percentage of spending
 # For percentage alerts, 'threshold' means PERCENTAGE NOT spending ($/money)
