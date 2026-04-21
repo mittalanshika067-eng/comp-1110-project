@@ -14,7 +14,7 @@ The assistant is privacy-focused (no bank sync), easy to use, and designed speci
 
 ## Team Members and Contribution
 
-- Krislyn Mariah Mendonca () - Transaction Management
+- Krislyn Mariah Mendonca (3036475213) - Transaction Management
 - Miracle - File Handling
 - Mansi - Summary Statistics
 - Anshika Mittal (3036476023) - Alerts System & Menu Integration
