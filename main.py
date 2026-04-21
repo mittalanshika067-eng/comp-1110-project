@@ -221,7 +221,8 @@ def main():
     
     # Ask for large transaction limit if not set
     large_transaction_limit(budget_rules)
-    
+    print("Here are the possible Categories for transactions and budget rules. If your category does not fall under these you can select other and add a description manually. 
+    Categories: ")
     # Main menu loop
     while True:
         print("\n" + "-" * 40)
