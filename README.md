@@ -73,7 +73,7 @@ python3 main.py
 - Uncategorized transaction warning
 
 ## Sample Test Cases 
-will add later
+4 case studies were used to test the functioning of this app
 
 ## Error Handling
 - Missing files: Creates new files or uses defaults
